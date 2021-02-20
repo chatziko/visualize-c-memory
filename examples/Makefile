@@ -1,8 +1,4 @@
-# paths
-LIB = ../../lib
-INCLUDE = ../../include
-
-# compiler options
+# options
 CC = gcc
 CFLAGS = -Wall -g 
 
@@ -11,7 +7,6 @@ LDFLAGS = -Wl,--wrap=malloc -Wl,--wrap=free
 
 OBJS = examples.o ../visualize-c-memory/malloc-wrapper.o
 EXEC = examples
-ARGS =
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
