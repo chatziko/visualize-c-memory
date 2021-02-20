@@ -45,6 +45,12 @@ def svg_of_memory():
     }
     infer_heap_types(memory)
 
+    # If the heap is too large, show only the last 100 entries
+    if(len(memory['heap']['values']) > 100):
+        memory['heap']['name'] = 'Heap (100 most recent entries)'
+        memory['heap']['values'] = memory['heap']['values'][-100:]
+        memory['heap']['fields'] = memory['heap']['fields'][-100:]
+
     dot = f"""
         digraph G {{
             layout = neato;
