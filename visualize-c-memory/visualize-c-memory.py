@@ -1,6 +1,7 @@
 import gdb      # pyright: reportMissingImports=false
 import subprocess
 import json
+import html
 
 
 ### Register pretty printer ######################
@@ -335,7 +336,7 @@ def rec_of_value(value, area):
 
     else:
         is_pointer = value.type.code == gdb.TYPE_CODE_PTR
-        rec['value'] = format_pointer(value) if is_pointer else value.format_string()
+        rec['value'] = format_pointer(value) if is_pointer else html.escape(value.format_string())
         rec['kind'] = 'pointer' if is_pointer else 'other'
 
     return rec
