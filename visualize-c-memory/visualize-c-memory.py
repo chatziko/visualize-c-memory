@@ -25,6 +25,19 @@ gdb.pretty_printers.append(lookup_printer)
 
 # Returns a json visualization of memory that can be consumed by vscode-debug-visualizer
 def visualize_memory():
+    try:
+        return json.dumps({
+            'kind': { 'svg': True },
+            'text': svg_of_memory(),
+        })
+    except BaseException as e:
+        # display errors using the text visualizer
+        return json.dumps({
+            'kind': { 'text': True },
+            'text': str(e)
+        })
+
+def svg_of_memory():
     memory = {
         'stack': recs_of_stack(),
         'heap': rec_of_heap(),
@@ -63,17 +76,10 @@ def visualize_memory():
         input=dot.encode('utf-8'),
         capture_output=True)
 
-    if svg.returncode == 0:
-        return json.dumps({
-            'kind': { 'svg': True },
-            'text': svg.stdout.decode('utf-8'),
-        })
-    else:
-        # display errors using the text visualizer
-        return json.dumps({
-            'kind': { 'text': True },
-            'text': f"dot failed:\n {svg.stderr.decode('utf-8')}\n\ndot source:\n{dot}",
-        })
+    if svg.returncode != 0:
+        raise Exception(f"dot failed:\n {svg.stderr.decode('utf-8')}\n\ndot source:\n{dot}")
+    
+    return svg.stdout.decode('utf-8')
 
 def dot_of_stack(memory):
     rows = [['<td>Stack</td>']]
@@ -221,7 +227,14 @@ def rec_of_heap():
     }
 
     # get the linked list from watch_heap.c
-    heap_node_ptr = gdb.parse_and_eval("heap_contents")['next']
+    try:
+        heap_node_ptr = gdb.parse_and_eval("heap_contents")['next']
+    except:
+        raise Exception(
+            "Heap information not found.\n"
+            "You need to link your program with malloc-wrapper.c\n"
+            "and pass -Wl,--wrap=malloc -Wl,--wrap=free to the linker.\n"
+        )
 
     while int(heap_node_ptr) != 0:
         # read node from the linked list
