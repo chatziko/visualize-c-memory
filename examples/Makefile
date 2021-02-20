@@ -2,8 +2,8 @@
 CC = gcc
 CFLAGS = -Wall -g 
 
-# This allows to wrap malloc & free (see malloc-wrapper.c) so that we can track heap allocations
-LDFLAGS = -Wl,--wrap=malloc -Wl,--wrap=free
+# This allows to wrap malloc/free/... (see malloc-wrapper.c) so that we can track heap allocations
+LDFLAGS = -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc -Wl,--wrap=free
 
 OBJS = examples.o ../visualize-c-memory/malloc-wrapper.o
 EXEC = examples
