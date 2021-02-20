@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		////////////// Compile ///////////////////////////////////
+		{
+			"type": "shell",
+			"label": "Make: compile",
+			"command": "make",
+			"options": {
+				"cwd": "${workspaceRoot}/examples"
+			},
+			"presentation": {
+				"clear": true,
+				"showReuseMessage": false
+			},
+			"problemMatcher": {
+				"base": "$gcc",
+				"fileLocation": [
+					"relative",
+					"${workspaceRoot}/examples"
+				]
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
