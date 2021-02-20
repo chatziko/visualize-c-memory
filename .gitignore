@@ -1,2 +1,3 @@
 *.o
-examples
+examples/examples
+.gdb_history
