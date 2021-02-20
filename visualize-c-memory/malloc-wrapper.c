@@ -40,7 +40,7 @@ void __wrap_free(void* ptr) {
 	// remove from the heap_contents list
 	for(heap_node* prev = &heap_contents; prev != NULL; prev = prev->next) {
 		heap_node* node = prev->next;
-		if(node->pointer == ptr) {
+		if(node != NULL && node->pointer == ptr) {
 			prev->next = node->next;
 			__real_free(node);
 			break;
