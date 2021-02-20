@@ -39,8 +39,10 @@ Tested in Ubuntu 20.04 and Windows 10 under WSL.
 ### To use it in your own programs
 
 - Link your code with `visualize-c-memory/malloc-wrapper.c`
-- Pass `-Wl,--wrap=malloc -Wl,--wrap=free` to gcc when linking.
-  This allows to wrap calls to `malloc` to keep track of the heap.
+- Pass the following to gcc when linking. This allows to watch the heap by wrapping `malloc` calls.
+  ```
+  -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc -Wl,--wrap=free
+  ```
 - Run `source visualize-c-memory/visualize-c-memory.py` when GDB launches (see [launch.json](.vscode/launch.json)).
 
 
