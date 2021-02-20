@@ -14,7 +14,7 @@ class MemoryPrinter:
 
 def lookup_printer(value):
     # Use MemoryPrinter if value is the string "memory"
-    if value.type.code == gdb.TYPE_CODE_ARRAY and value.type.target().code == gdb.TYPE_CODE_INT and value.string() == "memory":
+    if value.type.strip_typedefs().code == gdb.TYPE_CODE_ARRAY and value.type.target().strip_typedefs().code == gdb.TYPE_CODE_INT and value.string() == "memory":
         return MemoryPrinter()
     else:
         return None
@@ -335,7 +335,7 @@ def rec_of_value(value, area):
         rec['kind'] = 'struct'
 
     else:
-        is_pointer = value.type.code == gdb.TYPE_CODE_PTR
+        is_pointer = type.code == gdb.TYPE_CODE_PTR
         rec['value'] = format_pointer(value) if is_pointer else html.escape(value.format_string())
         rec['kind'] = 'pointer' if is_pointer else 'other'
 
