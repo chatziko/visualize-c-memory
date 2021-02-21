@@ -31,19 +31,32 @@ and [GDB's Python API](https://sourceware.org/gdb/current/onlinedocs/gdb/Python-
 - A visualization of both the stack and the heap will appear, and it will
   update as you step through the code (`F10`, `F11`, etc).
 
-- [`examples/examples.c`](examples/examples.c) contains standard C code, you can modify it freely.
+- Modify [`examples/examples.c`](examples/examples.c) to try your own code.
 
 Tested in Ubuntu 20.04 and Windows 10 under WSL.
 
 
-### To use it in your own programs
+### To use it in your own project
 
-- Link your code with `visualize-c-memory/malloc-wrapper.c`
-- Pass the following to gcc when linking. This allows to watch the heap by wrapping `malloc` calls.
+- Link your code with `visualize-c-memory/malloc-wrapper.c`.
+- Pass `-Wl,--wrap=malloc -Wl,--wrap=free` to gcc when linking, which allows to watch the 
+  heap by wrapping `malloc/free` calls. You can also optionally wrap any of the following
+  functions:
   ```
-  -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc -Wl,--wrap=free
+  calloc realloc strdup strndup
   ```
-- Run `source visualize-c-memory/visualize-c-memory.py` when GDB launches (see [launch.json](.vscode/launch.json)).
+  by passing `-Wl,--wrap=<function>` (once for each function).
+
+- Load `visualize-c-memory/visualize-c-memory.py` in GDB when it launches, by adding
+  the following to your `launch.json`:
+  ```
+  "setupCommands": [
+    {
+      "text": "source ${workspaceFolder}/<path-to>/visualize-c-memory.py"
+    }
+  ],
+  ```
+  See [.vscode/launch.json](.vscode/launch.json) for an example.
 
 
 

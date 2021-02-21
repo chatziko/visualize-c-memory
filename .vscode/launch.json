@@ -21,7 +21,7 @@
 					"ignoreFailures": true
 				},
 				{
-					"text": "source ../visualize-c-memory/visualize-c-memory.py"
+					"text": "source ${workspaceFolder}/visualize-c-memory/visualize-c-memory.py"
 				}
 			],
 			"preLaunchTask": "Make: compile",
