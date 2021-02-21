@@ -34,6 +34,10 @@ and [GDB's Python API](https://sourceware.org/gdb/current/onlinedocs/gdb/Python-
 - Modify [`examples/examples.c`](examples/examples.c) to try your own code.
 
 Tested in Ubuntu 20.04 and Windows 10 under WSL.
+macOS is not supported (to make it work one would need to workaround the
+linker's lack of `--wrap`, and the fact that Apple makes it
+[particularly painful](https://dev.to/jasonelwood/setup-gdb-on-macos-in-2020-489k) to use
+GDB in macOS).
 
 
 ### To use it in your own project
