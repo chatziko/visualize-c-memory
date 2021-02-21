@@ -1,13 +1,17 @@
-#include <stdlib.h>
+#include <string.h>
 
 // malloc/free wrapper
 // It simply calls the real malloc/free while recording all
 // currenly allocated memory in the heap_contents linked list.
 
 void* __real_malloc(size_t);
-void* __real_calloc(size_t, size_t);
-void* __real_realloc(void*, size_t);
 void __real_free(void*);
+
+// use weak symbols, to make wrapping of the following functions optional
+void* __attribute__((weak)) __real_calloc(size_t, size_t);
+void* __attribute__((weak)) __real_realloc(void*, size_t);
+char* __attribute__((weak)) __real_strdup(const char*);
+char* __attribute__((weak)) __real_strndup(const char*, size_t);
 
 
 // list management //////////////////////////////////////////////////////////////
@@ -77,5 +81,16 @@ void __wrap_free(void* pointer) {
 	__real_free(pointer);
 }
 
+char* __wrap_strdup(const char* s) {
+	char* new_s = __real_strdup(s);
+	insert_or_update_pointer(new_s, strlen(new_s) + 1, NULL);
+	return new_s;
+}
+
+char* __wrap_strndup(const char* s, size_t n) {
+	char* new_s = __real_strndup(s, n);
+	insert_or_update_pointer(new_s, strlen(new_s) + 1, NULL);
+	return new_s;
+}
 
 
