@@ -2,6 +2,7 @@ import gdb      # pyright: reportMissingImports=false
 import subprocess
 import json
 import html
+import traceback
 
 
 ### Register pretty printer ######################
@@ -35,7 +36,7 @@ def visualize_memory():
         # display errors using the text visualizer
         return json.dumps({
             'kind': { 'text': True },
-            'text': str(e)
+            'text': str(e) + "\n\n" + traceback.format_exc()
         })
 
 def svg_of_memory():
@@ -341,8 +342,17 @@ def rec_of_value(value, area):
         rec['kind'] = 'struct'
 
     else:
+        # treat function pointers as scalar values
         is_pointer = type.code == gdb.TYPE_CODE_PTR
-        rec['value'] = format_pointer(value) if is_pointer else html.escape(value.format_string())
-        rec['kind'] = 'pointer' if is_pointer else 'other'
+        func_pointer = is_pointer and type.target().code == gdb.TYPE_CODE_FUNC
+
+        if is_pointer and not func_pointer:
+            rec['value'] = format_pointer(value)
+            rec['kind'] = 'pointer'
+        else:
+            rec['value'] = html.escape(value.format_string())
+            rec['kind'] = 'other'
+            if func_pointer:
+                rec['value'] = rec['value'].replace("0x", "").replace(" ", "<br/>")
 
     return rec
