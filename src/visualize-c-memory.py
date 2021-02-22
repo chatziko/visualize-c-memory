@@ -153,6 +153,9 @@ def rows_of_rec(rec, memory):
             value_rec = rec['values'][i]
             rows = rows_of_rec(value_rec, memory)
 
+            if len(rows) == 0:      # it can happen in case of empty array
+                continue
+
             # the name is only inserted in the first row, with a rowspan to include all of them
             # an empty cell is also added to all other rows, so that len(row) always gives the number of cols
             rows[0].insert(0, f"""
@@ -338,7 +341,13 @@ def rec_of_value(value, area):
     }
 
     if type.code == gdb.TYPE_CODE_ARRAY:
+        # stack arrays of dynamic length (eg int foo[n]) might have huge size before the
+        # initialization code runs! In this case replace type with one of size 0
+        if int(type.sizeof) > 1000:
+            type = type.target().array(-1)
+
         array_size = int(type.sizeof / type.target().sizeof)
+
         rec['values'] = [rec_of_value(value[i], area) for i in range(array_size)]
         rec['kind'] = 'array'
 
@@ -356,7 +365,10 @@ def rec_of_value(value, area):
             rec['value'] = format_pointer(value)
             rec['kind'] = 'pointer'
         else:
-            rec['value'] = html.escape(value.format_string())
+            try:
+                rec['value'] = html.escape(value.format_string())
+            except:
+                rec['value'] = '?'
             rec['kind'] = 'other'
             if func_pointer:
                 rec['value'] = rec['value'].replace("0x", "").replace(" ", "<br/>")
