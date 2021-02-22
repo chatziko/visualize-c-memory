@@ -22,10 +22,10 @@ void local_vars_example() {
 
 	if(1) {
 		int block_scope = 1;
-		printf("%d", block_scope);
+		printf("local_vars_example: %d\n", block_scope);
 	}
 
-	printf("%d %f %d %d", my_int, my_float, my_array[0], my_struct.field1);
+	printf("local_vars_example: %d %f %d %d\n", my_int, my_float, my_array[0], my_struct.field1);
 }
 
 void pointer_example() {
@@ -110,7 +110,7 @@ int recursive_function(int n) {
 
 void recursion_example() {
 	int result = recursive_function(3);
-	printf("result: %d\n", result);
+	printf("recursion_example: %d\n", result);
 }
 
 void memory_leak_example() {
@@ -134,6 +134,9 @@ int main() {
 	recursion_example();
 	list_example();
 	memory_leak_example();
+
+	printf("\nVisualization examples. To display them, start debugging (F5),\n");
+	printf("open Debug Visualizer and type \"memory\" in the window that opens.\n\n");
 
 	return 0;
 }
