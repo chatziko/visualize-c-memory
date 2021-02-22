@@ -36,7 +36,7 @@ def visualize_memory():
         # display errors using the text visualizer
         return json.dumps({
             'kind': { 'text': True },
-            'text': str(e) + "\n\n" + traceback.format_exc()
+            'text': str(e) + "\n\n\n\n\n\n\n" + traceback.format_exc()
         })
 
 def svg_of_memory():
@@ -240,8 +240,9 @@ def rec_of_heap():
     except:
         raise Exception(
             "Heap information not found.\n"
-            "You need to link your program with malloc-wrapper.c\n"
-            "and pass -Wl,--wrap=malloc -Wl,--wrap=free to the linker.\n"
+            "You need to load visualize-c-memory.so by setting the environment variable\n"
+            "     LD_PRELOAD=<path-to>/visualize-c-memory.so\n"
+            "_or_ link your program with visualize-c-memory.c"
         )
 
     while int(heap_node_ptr) != 0:

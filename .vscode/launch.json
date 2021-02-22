@@ -8,7 +8,9 @@
 			"program": "${workspaceFolder}/examples/examples",
 			"stopAtEntry": true,
 			"cwd": "${workspaceFolder}/examples",
-			"environment": [],
+			"environment": [
+				{"name":"LD_PRELOAD", "value":"../visualize-c-memory/visualize-c-memory.so"},
+			],
 			"externalConsole": false,
 			"linux": {
 				"MIMode": "gdb",

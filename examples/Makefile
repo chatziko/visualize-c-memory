@@ -2,14 +2,15 @@
 CC = gcc
 CFLAGS = -Wall -g 
 
-# This allows to wrap malloc/free/... (see malloc-wrapper.c) so that we can track heap allocations
-LDFLAGS = -Wl,--wrap=malloc -Wl,--wrap=free
-
-OBJS = examples.o ../visualize-c-memory/malloc-wrapper.o
+LIB = ../visualize-c-memory
+OBJS = examples.o
 EXEC = examples
 
-$(EXEC): $(OBJS)
+$(EXEC): $(OBJS) $(LIB)/visualize-c-memory.so
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
+
+$(LIB)/visualize-c-memory.so:
+	$(MAKE) -C $(LIB) visualize-c-memory.so
 
 clean:
 	rm -f $(OBJS) $(EXEC)
