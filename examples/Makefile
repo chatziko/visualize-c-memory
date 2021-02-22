@@ -2,7 +2,7 @@
 CC = gcc
 CFLAGS = -Wall -g 
 
-LIB = ../visualize-c-memory
+LIB = ../src
 OBJS = examples.o
 EXEC = examples
 

@@ -9,7 +9,7 @@
 			"stopAtEntry": true,
 			"cwd": "${workspaceFolder}/examples",
 			"environment": [
-				{"name":"LD_PRELOAD", "value":"../visualize-c-memory/visualize-c-memory.so"},
+				{"name":"LD_PRELOAD", "value":"${workspaceFolder}/src/visualize-c-memory.so"},
 			],
 			"externalConsole": false,
 			"linux": {
@@ -23,7 +23,7 @@
 					"ignoreFailures": true
 				},
 				{
-					"text": "source ${workspaceFolder}/visualize-c-memory/visualize-c-memory.py"
+					"text": "source ${workspaceFolder}/src/visualize-c-memory.py"
 				}
 			],
 			"preLaunchTask": "Make: compile",
