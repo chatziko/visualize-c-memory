@@ -250,10 +250,11 @@ def rec_of_heap():
         heap_node = heap_node_ptr.dereference()
         pointer = heap_node['pointer']
         size = int(heap_node['size'])
+        source = chr(heap_node['source'])
         heap_node_ptr = heap_node['next']
 
         # for the moment we have no type information, so we just create an 'untyped' record
-        rec['fields'].append(f"malloc({size})")
+        rec['fields'].append(f"{'malloc' if source == 'm' else 'realloc' if source == 'r' else 'calloc'}({size})")
         rec['values'].append({
             'name': " ",        # space to avoid errors
             'value': "?",
