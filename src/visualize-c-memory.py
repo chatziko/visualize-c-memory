@@ -66,7 +66,7 @@ def svg_of_memory():
     """
 
     # debugging
-    print(dot)
+    # print(dot)
     # return json.dumps({
     #     'kind': { 'text': True },
     #     'text': dot,
@@ -263,6 +263,10 @@ def rec_of_heap():
             'area': 'heap',
             'kind': 'untyped',
         })
+
+    # the linked list contains the heap contents in reverse order
+    rec['fields'].reverse()
+    rec['values'].reverse()
 
     return rec
 
