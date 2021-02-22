@@ -34,26 +34,20 @@ and [GDB's Python API](https://sourceware.org/gdb/current/onlinedocs/gdb/Python-
 - Modify [`examples/examples.c`](examples/examples.c) to try your own code.
 
 Tested in Ubuntu 20.04 and Windows 10 under WSL.
-macOS is not supported (to make it work one would need to workaround the
-linker's lack of `--wrap`, and the fact that Apple makes it
+macOS is not supported (it could be adapted, but Apple makes it
 [particularly painful](https://dev.to/jasonelwood/setup-gdb-on-macos-in-2020-489k) to use
-GDB in macOS).
+GDB in macOS anyway).
 
 
 ### To use it in your own project
 
-- Link your code with `visualize-c-memory/malloc-wrapper.c`.
-- Pass `-Wl,--wrap=malloc -Wl,--wrap=free` to gcc when linking, which allows to watch the 
-  heap by wrapping `malloc/free` calls. You can also optionally wrap any of the following
-  functions:
-  ```
-  calloc realloc strdup strndup
-  ```
-  by passing `-Wl,--wrap=<function>` (once for each function).
-
-- Load `visualize-c-memory/visualize-c-memory.py` in GDB when it launches, by adding
+- Build `visualize-c-memory.so` (by running `make` in `src`).
+- Load the `.so` and the python module in GDB by adding
   the following to your `launch.json`:
   ```
+	"environment": [
+		{"name":"LD_PRELOAD", "value":"${workspaceFolder}/<path-to>/visualize-c-memory.so"},
+	],
   "setupCommands": [
     {
       "text": "source ${workspaceFolder}/<path-to>/visualize-c-memory.py"
