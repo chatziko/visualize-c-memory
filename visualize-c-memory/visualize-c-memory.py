@@ -168,7 +168,7 @@ def rows_of_rec(rec, memory):
             res.insert(0, [f'<td width="170">{rec["name"]}</td>'])
 
     else:
-        color = 'red' if rec['kind'] == 'pointer' and lookup_address(rec['value'], memory) is None else 'black'
+        color = 'red' if rec['kind'] == 'pointer' and rec['value'] != "0" and lookup_address(rec['value'], memory) is None else 'black'
         res = [[
             f"""<td port="{rec['address']}-right"><font color="{color}" point-size="11">{rec['value']}</font></td>""",
             f"""<td port="{rec['address']}-left"><font point-size="9">{rec['address']} ({rec['size']})</font></td>""",
