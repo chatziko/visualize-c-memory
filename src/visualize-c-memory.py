@@ -286,6 +286,13 @@ def infer_heap_types(memory):
         if type.target().code == gdb.TYPE_CODE_VOID:
             continue        # void pointer, not useful
 
+        if type.target().sizeof == 0:
+            # pointer to incomplete struct, just add the type name to the "?" value
+            code_name = 'struct ' if type.target().code == gdb.TYPE_CODE_STRUCT else \
+                        'union '  if type.target().code == gdb.TYPE_CODE_UNION  else ''
+            rec['value'] = f'? ({code_name}{type.target().name})'
+            continue
+
         # we use the type information to get a typed value, then
         # replace the heap rec with a new one obtained from the typed value
         n = int(rec['size'] / type.target().sizeof)
